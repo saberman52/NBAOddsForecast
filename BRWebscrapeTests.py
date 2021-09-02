@@ -47,6 +47,38 @@ def testExtractMonthURLs():
     print('month Links \n',monthURLs)
     print('good links \n',goodLink)
 
+def testConvertWL():
+    '''
+    testConvertWL() tests the convertWL() function.
+    '''
+    # first test: download known good table from a BR webpage
+    url = 'https://www.basketball-reference.com/leagues/NBA_2021_games.html'
+    table_list = pd.read_html(url,flavor='bs4')
+    processedTable = br.convertWL(table_list[0])
+    print(processedTable.head())
+    '''
+    Expected Output:
+
+        Date                Visitor/Neutral     Home/Neutral    VisitorWin
+    0   Tue, Dec 22, 2020   GSW                 BRK             False
+    1   Tue, Dec 22, 2020   LAC                 LAL             True
+    2   Wed, Dec 23, 2020   CHA                 CLE             False
+    3   Wed, Dec 23, 2020   NYK                 IND             False
+    4   Wed, Dec 23, 2020   MIA                 ORL             False
+    '''
+
+    # second test: give a table with deliberately mispelled entry
+    originalTable = table_list[0]
+    tableMispell = pd.DataFrame(originalTable[0:1])
+    tableMispell.at[1,'Visitor/Neutral'] = 'Los Angeles Clipers' # rename with a mispelled team name
+    processedTable = br.convertWL(tableMispell)
+    print('processedTable is None: ',processedTable is None)
+
+# run tests
 if __name__ == '__main__':
+    print('Test extractMonthURLs()')
     testExtractMonthURLs()
+    print('###################################')
+    print('Test convertWL()')
+    testConvertWL()
 
