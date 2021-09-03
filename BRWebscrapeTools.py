@@ -161,3 +161,54 @@ def extractMonthsGames(url):
         
     processedTable = convertWL(table_list[0])
     return processedTable
+
+def extractSeasonsGames(season,brURL):
+    '''
+    extractSeasonsGames scrapes BR webpages to extract the outcomes (win or loss) of 
+    all NBA games of a particular season. They are returned in a single pd DataFrame.
+
+    Inputs:
+        season : string with second year of season (e.g. for 2000-2001 season, '2001')
+        brURL :  https://www.basketball-reference.com
+
+    Outputs: (in the event of anassumption not being met, returns None)
+        seasonTable : pd DataFrame containing all the games and outcomes for single NBA season
+        missingMonths : bool indicating if any month's data was excluded from the table
+    '''
+    seasonURL = brURL + '/leagues/NBA_' + season + '_games.html'
+    # check that the webpage is good
+    urlTest = requests.head(seasonURL)
+    if urlTest.status_code != 200:
+        print('From',seasonURL,'unexpected status code',urlTest.status_code)
+        return None,None #expects two outputs
+    
+    # get URLs for each month of games
+    monthURLs,monthNames,goodLink = extractMonthURLs(seasonURL,brURL)
+    
+    # loop through months to get data for each month
+    monthTables = [] # array for storing season's month's tables
+    for i,url in enumerate(monthURLs):
+        if not goodLink[i]:
+            print('Bad link for',monthNames[i],':',url)
+            print('Skipping and proceeding.')
+            continue
+        else:
+            processedTable = extractMonthsGames(url)
+            if processedTable is not None:
+                monthTables.append(processedTable)
+            else:
+                print('Excluding',monthNames[i])
+    
+    # check if any months were excluded
+    missingMonths = len(monthTables) < len(monthNames)
+    
+    # combine all months into single DataFrame
+    if len(monthTables) > 0:
+        seasonTable = pd.concat(monthTables)
+    else:
+        print('No months loaded')
+        seasonTable = None
+    
+    return seasonTable,missingMonths
+
+

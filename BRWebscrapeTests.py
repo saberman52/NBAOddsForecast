@@ -74,6 +74,34 @@ def testConvertWL():
     processedTable = br.convertWL(tableMispell)
     print('processedTable is None: ',processedTable is None)
 
+def testExtractSeasonsGames():
+    '''
+    testExtractSeasonsGames tests the extractSeasonsGames() function.
+    '''
+    # test 1: for a webpage known to work, it correctly extracts the data
+    print('test 1')
+    brURL = 'https://www.basketball-reference.com'
+    season = '2021'
+    seasonTable,missingMonths = br.extractSeasonsGames(season,brURL)
+    if seasonTable.shape == (1171,4):
+        print('From webpage extracted table with correct shape')
+    else:
+        print('Table from webpage has incorrect shape')
+    print('missingMonths =',missingMonths) # expected: false
+
+    # test 2: bad season name, leading to broken link
+    print('test 2')
+    season = '202'
+    seasonTable,missingMonths = br.extractSeasonsGames(season,brURL)
+    if seasonTable is None and missingMonths is None:
+        print('correct output returned')
+    else:
+        print('incorrect output returned')
+
+    # note: there are several clauses that remain unvisited by this test
+
+
+
 # run tests
 if __name__ == '__main__':
     print('Test extractMonthURLs()')
@@ -81,4 +109,8 @@ if __name__ == '__main__':
     print('###################################')
     print('Test convertWL()')
     testConvertWL()
+    print('###################################')
+    print('Test extractSeasonsGames()')
+    testExtractSeasonsGames()
+
 
