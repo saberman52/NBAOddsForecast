@@ -105,7 +105,8 @@ teamNameKey = {'Atlanta Hawks' : 'ATL',
               'San Antonio Spurs' : 'SAS',
               'Toronto Raptors' : 'TOR',
               'Utah Jazz' : 'UTA',
-              'Washington Wizards' : 'WAS'}
+              'Washington Wizards' : 'WAS',
+              'Playoffs' : 'PLY'} # 'Playoffs' designation appears in every field in table
 
 def convertWL(raw_data):
     '''
@@ -138,7 +139,11 @@ def convertWL(raw_data):
         if pd.isna(my_table[col]).any():
             print('Error: A',col,'team had a name not matching any keys.')
             return # exit if this is the case
-        
+
+    # drop rows containing PLY
+    my_table.where(my_table != 'PLY',inplace=True) # replace 'PLY' with NaN
+    my_table.dropna(inplace=True)
+    
     return my_table
 
 def extractMonthsGames(url):
@@ -210,5 +215,40 @@ def extractSeasonsGames(season,brURL):
         seasonTable = None
     
     return seasonTable,missingMonths
+
+def downloadGameData(initialSeason,finalSeason):
+    '''
+    Inputs:
+    initialSeason : int indicating starting season to get data (second year of season e.g. 2000 for 1999-2000 season)
+    finalSeason : int indicating final seaon to get data for
+    '''
+    brURL = 'https://www.basketball-reference.com'
+    seasonTables = [] # to store tables from each season
+    badSeasons = [] # to store seasons for which downloading data failed to meet all assumptions
+    
+    # loop over and download each season's data
+    for season in range(initialSeason,finalSeason+1):
+        print('Dowloading',season,'season data...')
+        table,missingMonths = extractSeasonsGames(str(season),brURL)
+        # case: no table returned
+        if table is None:
+            badSeasons.append(season)
+        else:
+            # store table
+            seasonTables.append(table)
+            table.to_hdf('pyData/games'+str(season)+'.h5','table')
+            # case: there was a missing month
+            if missingMonths:
+                badSeasons.append(season)
+        print('##################################')
+    
+    # if all data was downloaded perfectly, combine into single pd DataFrame and save it
+    if len(badSeasons) == 0:
+        print('Saving all data to a single table!')
+        allGameData = pd.concat(seasonTables)
+        allGameData.to_hdf('pyData/allGames'+str(initialSeason)+'_'+str(finalSeason)+'.h5','allGameData')
+
+if __name__ == '__main__':
+    downloadGameData(2001,2021)
 
 
