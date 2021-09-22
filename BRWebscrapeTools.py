@@ -73,8 +73,8 @@ teamNameKey: global variable giving mapping from team names to 3 letter abbrevia
 teamNameKey = {'Atlanta Hawks' : 'ATL',
               'Boston Celtics' : 'BOS',
               'Brooklyn Nets' : 'BRK',
-              'New Jersey Nets' : 'BRK', # 1977-78 to 2011-12
-              'Charlotte Hornets' : 'CHA', 
+              'New Jersey Nets' : 'NJN', # 1977-78 to 2011-12
+              'Charlotte Hornets' : 'CHO', 
               'Charlotte Bobcats' : 'CHA', # 2004-05 to 2013-14
               'Chicago Bulls' : 'CHI',
               'Cleveland Cavaliers' : 'CLE',
@@ -87,16 +87,16 @@ teamNameKey = {'Atlanta Hawks' : 'ATL',
               'Los Angeles Clippers' : 'LAC',
               'Los Angeles Lakers' : 'LAL',
               'Memphis Grizzlies' : 'MEM',
-              'Vancouver Grizzlies' : 'MEM', # 1995-96 to 2000-01
+              'Vancouver Grizzlies' : 'VAN', # 1995-96 to 2000-01
               'Miami Heat' : 'MIA',
               'Milwaukee Bucks' : 'MIL',
               'Minnesota Timberwolves' : 'MIN',
               'New Orleans Pelicans' : 'NOP',
-              'New Orleans/Oklahoma City Hornets' : 'NOP', # 2005-06 to 2006-07
-              'New Orleans Hornets' : 'NOP', # 2002-03 to 2012-13
+              'New Orleans/Oklahoma City Hornets' : 'NOK', # 2005-06 to 2006-07
+              'New Orleans Hornets' : 'NOH', # 2002-03 to 2012-13
               'New York Knicks' : 'NYK',
               'Oklahoma City Thunder' : 'OKC',
-              'Seattle SuperSonics' : 'OKC', # 1967-68 to 2007-08
+              'Seattle SuperSonics' : 'SEA', # 1967-68 to 2007-08
               'Orlando Magic' : 'ORL',
               'Philadelphia 76ers' : 'PHI',
               'Phoenix Suns' : 'PHO',
