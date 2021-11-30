@@ -236,7 +236,7 @@ def downloadGameData(initialSeason,finalSeason):
         else:
             # store table
             seasonTables.append(table)
-            table.to_hdf('pyData/games'+str(season)+'.h5','table')
+            table.to_hdf('pyData/games'+str(season)+'.h5','table',mode='w')
             # case: there was a missing month
             if missingMonths:
                 badSeasons.append(season)
@@ -246,7 +246,7 @@ def downloadGameData(initialSeason,finalSeason):
     if len(badSeasons) == 0:
         print('Saving all data to a single table!')
         allGameData = pd.concat(seasonTables)
-        allGameData.to_hdf('pyData/allGames'+str(initialSeason)+'_'+str(finalSeason)+'.h5','allGameData')
+        allGameData.to_hdf('pyData/allGames'+str(initialSeason)+'_'+str(finalSeason)+'.h5','allGameData',mode='w')
 
 if __name__ == '__main__':
     downloadGameData(2001,2021)
